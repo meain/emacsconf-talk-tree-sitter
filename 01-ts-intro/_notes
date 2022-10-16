@@ -1,0 +1,1 @@
+(for_statement (assignment_expression (identifier) @id))

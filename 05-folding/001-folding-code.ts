@@ -2,7 +2,7 @@
  * Convert preprocessor output for the tag content into MappedCode
  */
 function processed_content_to_code(processed: Processed, location: SourceLocation,
-                                   file_basename: string): MappedCode {
+            file_basename: string): MappedCode {
 	let decoded_map: DecodedSourceMap;
 	if (processed.map) {
 		decoded_map = decode_map(processed);

@@ -1,4 +1,3 @@
-# maybe self thing???
 def _find_impl(cls, registry):
     """Returns the best matching implementation from *registry* for type *cls*.
     Where there is no registered implementation for a specific type, its method

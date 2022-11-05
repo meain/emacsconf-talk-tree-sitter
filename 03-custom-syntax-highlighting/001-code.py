@@ -1,22 +1,27 @@
-def _find_impl(cls, registry):
-    """Returns the best matching implementation from *registry* for type *cls*.
-    Where there is no registered implementation for a specific type, its method
-    resolution order is used to find a more generic implementation.
-    Note: if *registry* does not contain an implementation for the base
-    *object* type, this function may return None.
+# Purely functional, no descriptor behaviour
+class partial:
+    """New function with partial application of the given arguments
+    and keywords.
     """
-    mro = _compose_mro(cls, registry.keys())
-    match = None
-    for t in mro:
-        if match is not None:
-            # If *match* is an implicit ABC but there is another unrelated,
-            # equally matching implicit ABC, refuse the temptation to guess.
-            if (t in registry and t not in cls.__mro__
-                              and match not in cls.__mro__
-                              and not issubclass(match, t)):
-                raise RuntimeError("Ambiguous dispatch: {} or {}".format(
-                    match, t))
-            break
-        if t in registry:
-            match = t
-    return registry.get(match)
+
+    def __new__(cls, func, /, *args, **keywords):
+        self = super(partial, cls).__new__(cls)
+
+        self.func = func
+        self.args = args
+        self.keywords = keywords
+        return self
+
+    def __call__(self, /, *args, **keywords):
+        keywords = {**self.keywords, **keywords}
+        return self.func(*self.args, *args, **keywords)
+
+    @recursive_repr()
+    def __repr__(self):
+        qualname = type(self).__qualname__
+        args = [repr(self.func)]
+        args.extend(repr(x) for x in self.args)
+        args.extend(f"{k}={v!r}" for (k, v) in self.keywords.items())
+        if type(self).__module__ == "functools":
+            return f"functools.{qualname}({', '.join(args)})"
+        return f"{qualname}({', '.join(args)})"

@@ -1,4 +1,5 @@
 Slides/Files for EmacsConf 2022 talk "Tree-sitter beyond syntax highlighting"
+https://emacsconf.org/2022/talks/treesitter/
 
 ### My Emacs config
 
